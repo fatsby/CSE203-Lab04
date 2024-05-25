@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Scanner;
 
-public abstract class Student {
+public abstract class Student implements Serializable {
     protected String fullName;
     protected String number;
     protected int creditsEarned;

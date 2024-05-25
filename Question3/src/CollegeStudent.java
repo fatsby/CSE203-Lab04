@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class CollegeStudent extends Student {
+public class CollegeStudent extends Student implements Serializable {
     private double gradScore;
     static Scanner sc = new Scanner(System.in);
 

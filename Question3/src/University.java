@@ -1,10 +1,22 @@
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Scanner;
-import java.util.Vector;
+import java.util.List;
+
 
 public class University {
-    private static Scanner sc = new Scanner(System.in);
-    private static Vector<Student> students = new Vector<>();
+    private List<Student> students;
+
+    public University(){
+        students = new ArrayList<Student>();
+
+        if (FileUtils.fileExists("College.DAT")) {
+            students.addAll(FileUtils.readStudentFromFile("College.DAT"));
+        }
+        if (FileUtils.fileExists("University.DAT")) {
+            students.addAll(FileUtils.readStudentFromFile("University.DAT"));
+        }
+    }
 
     public void addCollegeStudent(int loop){
         for(int i = 0; i < loop; i++){
@@ -12,6 +24,7 @@ public class University {
             student.Input();
             students.add(student);
         }
+        saveToFile();
     }
     public void addUniversityStudent(int loop){
         for (int i = 0; i < loop; i++) {
@@ -19,6 +32,7 @@ public class University {
             student.Input();
             students.add(student);
         }
+        saveToFile();
     }
 
     public void printStudentList(){
@@ -50,19 +64,24 @@ public class University {
 
     public void removeStudent(String code){
         students.removeIf(student -> student.getNumber().equals(code));
+        saveToFile();
     }
 
     public void sortStudentList() {
         students.sort(Comparator.comparing((Student student) -> student.getClass().getSimpleName())
                 .thenComparing(Student::getNumber));
+        saveToFile();
     }
 
     public void findByName(String name){
+        List<Student> results = new ArrayList<>();
         for(Student student : students){
             if(student.getFullName().contains(name)){
+                results.add(student);
                 System.out.println(student.getFullName() + " " + student.getNumber());
             }
         }
+        FileUtils.writeStudentsToFile("Result.dat", results);
     }
 
 
@@ -86,5 +105,19 @@ public class University {
         student.setThesisName(thesisName);
         student.setThesisScore(thesisScore);
         students.add(student);
+    }
+
+    public void saveToFile(){
+        List<Student> collegeStudents = new ArrayList<>();
+        List<Student> universityStudents = new ArrayList<>();
+        for(Student student : students){
+            if(student instanceof CollegeStudent){
+                collegeStudents.add(student);
+            } else if (student instanceof UniversityStudent) {
+                universityStudents.add(student);
+            }
+        }
+        FileUtils.writeStudentsToFile("College.DAT", collegeStudents);
+        FileUtils.writeStudentsToFile("University.DAT", universityStudents);
     }
 }

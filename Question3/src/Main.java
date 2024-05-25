@@ -76,6 +76,7 @@ public class Main {
                     System.out.println("===========================");
                     System.out.println();
                     addRandomStudents();
+                    university.saveToFile();
                     break;
                 default:
                     System.out.println("Invalid choice");
